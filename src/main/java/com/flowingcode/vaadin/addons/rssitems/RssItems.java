@@ -51,6 +51,8 @@ public class RssItems extends PolymerTemplate<RssItemsModel> implements HasSize,
 	
 	private String url;
 	
+	private boolean extractImageFromDescription;
+	
 	private static final String errorRss = "<rss>\r\n" + 
 			"  <channel>\r\n" + 
 			"    <item>\r\n" + 
@@ -69,6 +71,15 @@ public class RssItems extends PolymerTemplate<RssItemsModel> implements HasSize,
 			"      items = $0.max === undefined ? items : items.splice(0, $0.max)\r\n" + 
 			"      $0.items = $0._parseItems(items)\r\n" + 
 			"    })()";
+	
+	private static final String imageMethod = "    $0._getItemImageScr = function (item) {\r\n" + 
+			"        var element = document.createElement('div');\r\n" + 
+			"        element.innerHTML = item.description;\r\n" + 
+			"        var image = element.querySelector('img') || {};\r\n" + 
+			"        return image.src || '';\r\n" + 
+			"    }\r\n" + 
+			"";
+	
 
 	private static final int DEFAULT_MAX = Integer.MAX_VALUE;
 
@@ -80,7 +91,12 @@ public class RssItems extends PolymerTemplate<RssItemsModel> implements HasSize,
 	 * @param url rss feed url
 	 * @param max max number of items to show
 	 */
-	public RssItems(String url, int max, int maxTitleLength, int maxExcerptLength) {
+	public RssItems(String url, int max, int maxTitleLength, int maxExcerptLength, boolean extractImageFromDescription) {
+		this.extractImageFromDescription = extractImageFromDescription;
+		if (extractImageFromDescription) {
+			UI.getCurrent().getPage().executeJavaScript(imageMethod, this.getElement());
+		}
+		
 		getModel().setAuto(true);
 		getModel().setMax(max);
 		getModel().setMaxExcerptLength(maxExcerptLength);
@@ -95,7 +111,7 @@ public class RssItems extends PolymerTemplate<RssItemsModel> implements HasSize,
 	 * @param url rss feed url
 	 */
 	public RssItems(String url) {
-		this(url,DEFAULT_MAX, DEFAULT_MAX_TITLE_LENGTH, DEFAULT_MAX_EXCERPT_LENGTH);
+		this(url,DEFAULT_MAX, DEFAULT_MAX_TITLE_LENGTH, DEFAULT_MAX_EXCERPT_LENGTH,false);
 	}
 
 	private void refreshUrl() {
@@ -123,6 +139,7 @@ public class RssItems extends PolymerTemplate<RssItemsModel> implements HasSize,
 		HttpEntity entity = response.getEntity();
 		String result = EntityUtils.toString(entity);
 		EntityUtils.consume(entity);
+		request.completed();
 		return result;
 	}
 	
@@ -150,6 +167,11 @@ public class RssItems extends PolymerTemplate<RssItemsModel> implements HasSize,
 	 */
 	public void setMax(int max) {
 		getModel().setMax(max);
+		refreshUrl();
+	}
+
+	public void setExtractImageFromDescription(boolean extractImageFromDescription) {
+		this.extractImageFromDescription = extractImageFromDescription;
 		refreshUrl();
 	}
 

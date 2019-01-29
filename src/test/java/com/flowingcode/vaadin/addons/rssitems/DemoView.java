@@ -33,7 +33,7 @@ public class DemoView extends Div {
 	
 	public DemoView() {
 		Dialog dialog = new Dialog();
-		RssItems items = new RssItems("https://www.flowingcode.com/feeds/posts/default?alt=rss",6,100,100);
+		RssItems items = new RssItems("https://www.flowingcode.com/feeds/posts/default?alt=rss",6,100,100,true);
 		dialog.add(items);
 
 		dialog.setWidth("700px");
