@@ -45,7 +45,7 @@ import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
  */
 @Tag("rss-items")
 @HtmlImport("bower_components/rss-items/rss-items.html")
-@HtmlImport("frontend://styles/shared-styles.html")
+@HtmlImport("frontend://styles/rss-items-styles.html")
 @SuppressWarnings("serial")
 public class RssItems extends PolymerTemplate<RssItemsModel> implements HasSize, HasStyle {
 	
