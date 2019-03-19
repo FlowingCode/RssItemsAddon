@@ -1,5 +1,3 @@
-package com.flowingcode.vaadin.addons.rssitems;
-
 /*-
  * #%L
  * RSS Items
@@ -19,6 +17,7 @@ package com.flowingcode.vaadin.addons.rssitems;
  * limitations under the License.
  * #L%
  */
+package com.flowingcode.vaadin.addons.rssitems;
 
 import com.vaadin.flow.templatemodel.TemplateModel;
 
