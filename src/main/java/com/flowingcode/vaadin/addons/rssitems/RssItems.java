@@ -34,7 +34,8 @@ import com.vaadin.flow.component.HasSize;
 import com.vaadin.flow.component.HasStyle;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.UI;
-import com.vaadin.flow.component.dependency.HtmlImport;
+import com.vaadin.flow.component.dependency.JsModule;
+import com.vaadin.flow.component.dependency.NpmPackage;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
 
 /**
@@ -43,7 +44,10 @@ import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
  * @author Martin Lopez / Flowing Code
  */
 @Tag("rss-items")
-@HtmlImport("bower_components/rss-items/rss-items.html")
+@NpmPackage(value="@polymer/iron-ajax",version="3.0.1")
+@NpmPackage(value="@polymer/iron-image",version="3.0.2")
+@NpmPackage(value="x2js",version="3.4.0")
+@JsModule("./rss-items.js")
 @SuppressWarnings("serial")
 public class RssItems extends PolymerTemplate<RssItemsModel> implements HasSize, HasStyle {
 	
@@ -59,16 +63,6 @@ public class RssItems extends PolymerTemplate<RssItemsModel> implements HasSize,
 			"      <description>There was an error retrieving the rss: %s</description>\r\n" + 
 			"      <thumbnail url=\"https://\"></thumbnail>\r\n" + 
 			"    </item>";
-	
-	private static final String xmlStr2JS = "    (function _xmlStr2JS() {\r\n" + 
-			"      // parse xml to json and get items\r\n" + 
-			"      var conversor = new X2JS()\r\n" + 
-			"      var json = conversor.xml_str2json($1)\r\n" + 
-			"      var items = json.rss ? json.rss.channel.item : json.channel.item\r\n" + 
-			"      // truncate with this.max and parse items\r\n" + 
-			"      items = $0.max === undefined ? items : items.splice(0, $0.max)\r\n" + 
-			"      $0.items = $0._parseItems(items)\r\n" + 
-			"    })()";
 	
 	private static final String imageMethod = "    $0._getItemImageScr = function (item) {\r\n" + 
 			"        var element = document.createElement('div');\r\n" + 
@@ -91,8 +85,8 @@ public class RssItems extends PolymerTemplate<RssItemsModel> implements HasSize,
 	 */
 	public RssItems(String url, int max, int maxTitleLength, int maxExcerptLength, boolean extractImageFromDescription) {
 		this.extractImageFromDescription = extractImageFromDescription;
-		if (extractImageFromDescription) {
-			UI.getCurrent().getPage().executeJavaScript(imageMethod, this.getElement());
+		if (this.extractImageFromDescription) {
+			UI.getCurrent().getPage().executeJs(imageMethod, this.getElement());
 		}
 		
 		getModel().setAuto(true);
@@ -123,7 +117,7 @@ public class RssItems extends PolymerTemplate<RssItemsModel> implements HasSize,
 	}
 
 	private void invokeXmlToItems(String rss) {
-		UI.getCurrent().getPage().executeJavaScript(xmlStr2JS, this.getElement(), rss);
+		this.getElement().executeJs("this.xmlToItems($0)", rss);
 	}
 
 	private String obtainRss(String url) throws ClientProtocolException, IOException {
