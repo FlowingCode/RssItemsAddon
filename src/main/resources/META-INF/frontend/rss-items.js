@@ -38,7 +38,7 @@ import '@polymer/polymer/polymer-legacy.js';
 
 import '@polymer/iron-ajax/iron-ajax.js';
 import '@polymer/iron-image/iron-image.js';
-//import 'x2js/x2js.js';
+import * as X2JS from "x2js/x2js.js";
 import {PolymerElement} from '@polymer/polymer/polymer-element.js';
 import {html} from '@polymer/polymer/lib/utils/html-tag.js';
 
@@ -46,7 +46,6 @@ class RssItems extends PolymerElement {
 	static get is() { return 'rss-items'; }
 	
 	static get template() {
-		debugger;
 		return html`
   <style>
     :host {
@@ -279,17 +278,12 @@ class RssItems extends PolymerElement {
    * @param {Object} xml XML element.
    */
   xmlToItems(xml) {
-	  import('x2js/x2js.js').then((X2JSModule) => {
-			console.log("X2JSModule loaded");
-			X2JSModule.default()
-			var json = X2JSModule.xml2js(xml)
-			var items = json.rss ? json.rss.channel.item : json.channel.item
-			// truncate with this.max and parse items
-			items = this.max === undefined ? items : items.splice(0, this.max)
-			this.items = this._parseItems(items)
-		}).catch((reason) => {
-			console.log("X2JSModule failed to load", reason);
-		});
+	var x2 = new X2JS()
+	var json = x2.xml2js(xml)
+	var items = json.rss ? json.rss.channel.item : json.channel.item
+	// truncate with this.max and parse items
+	items = this.max === undefined ? items : items.splice(0, this.max)
+	this.items = this._parseItems(items)
   }
 
   /**

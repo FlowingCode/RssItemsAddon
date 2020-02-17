@@ -2,11 +2,11 @@
 
 # RSS Items Addon
 
-Vaadin 10+ wrapper for https://github.com/TherapyChat/rss-items
+Vaadin 14+ RSS display component based on https://github.com/TherapyChat/rss-items
 
 ## Online demo
 
-[Online demo here](http://addonsv10.flowingcode.com/rss-items)
+[Online demo here](http://addonsv14.flowingcode.com/rss-items)
 
 ## Building and running demo
 
@@ -17,6 +17,7 @@ To see the demo, navigate to http://localhost:8080/
 
 ## Release notes
 
+- **Version 2.0.0** Initial release for Vaadin 14+ NPM mode
 - **Version 1.0.0** Initial Version
 
 ## Issue tracking
