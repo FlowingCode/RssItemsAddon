@@ -1,4 +1,4 @@
-[![Build Status](https://jenkins.flowingcode.com/job/RssItems-addon/badge/icon)](https://jenkins.flowingcode.com/job/RssItems-addon)
+[![Build Status](https://jenkins.flowingcode.com/job/RssItems-14-addon/badge/icon)](https://jenkins.flowingcode.com/job/RssItems-14-addon)
 
 # RSS Items Addon
 
