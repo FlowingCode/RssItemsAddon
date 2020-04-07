@@ -55,7 +55,7 @@ public class RssItems extends PolymerTemplate<RssItemsModel> implements HasSize,
 	
 	private boolean extractImageFromDescription;
 	
-	private static final String errorRss = "<rss>\r\n" + 
+	private static final String ERROR_RSS = "<rss>\r\n" + 
 			"  <channel>\r\n" + 
 			"    <item>\r\n" + 
 			"      <title>Error Retrieving RSS</title>\r\n" + 
@@ -64,9 +64,9 @@ public class RssItems extends PolymerTemplate<RssItemsModel> implements HasSize,
 			"      <thumbnail url=\"https://\"></thumbnail>\r\n" + 
 			"    </item>";
 	
-	private static final String imageMethod = "    $0._getItemImageScr = function (item) {\r\n" + 
-			"        var element = document.createElement('div');\r\n" + 
-			"        element.innerHTML = item.description;\r\n" + 
+	private static final String IMAGE_METHOD = "    $0._getItemImageScr = function (item) {\r\n" + 
+			"        var element = document.createElement('div');\r\n" +
+			"        element.innerHTML = item.%%ATTRIBUTE_NAME%%;\r\n" + 
 			"        var image = element.querySelector('img') || {};\r\n" + 
 			"        return image.src || '';\r\n" + 
 			"    }\r\n" + 
@@ -84,9 +84,16 @@ public class RssItems extends PolymerTemplate<RssItemsModel> implements HasSize,
 	 * @param max max number of items to show
 	 */
 	public RssItems(String url, int max, int maxTitleLength, int maxExcerptLength, boolean extractImageFromDescription) {
+		this(url, max, maxTitleLength, maxExcerptLength, extractImageFromDescription, "description");
+	}
+	/**
+	 * @param url rss feed url
+	 * @param max max number of items to show
+	 */
+	public RssItems(String url, int max, int maxTitleLength, int maxExcerptLength, boolean extractImageFromDescription, String attributeName) {
 		this.extractImageFromDescription = extractImageFromDescription;
 		if (this.extractImageFromDescription) {
-			UI.getCurrent().getPage().executeJs(imageMethod, this.getElement());
+			UI.getCurrent().getPage().executeJs(IMAGE_METHOD.replaceAll("%%ATTRIBUTE_NAME%%", attributeName), this.getElement());
 		}
 		
 		getModel().setAuto(true);
@@ -112,7 +119,7 @@ public class RssItems extends PolymerTemplate<RssItemsModel> implements HasSize,
 			invokeXmlToItems(rss);
 		} catch (Exception e) {
 			e.printStackTrace();
-			invokeXmlToItems(String.format(errorRss, e.toString()));
+			invokeXmlToItems(String.format(ERROR_RSS, e.toString()));
 		}
 	}
 

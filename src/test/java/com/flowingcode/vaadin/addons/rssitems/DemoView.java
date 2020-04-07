@@ -33,7 +33,7 @@ public class DemoView extends FlexLayout {
 	public DemoView() {
 		setSizeFull();
 		setJustifyContentMode(JustifyContentMode.CENTER);
-		Card card = new Card(new RssItems("https://www.flowingcode.com/feeds/posts/default?alt=rss",6,100,100,true));
+		Card card = new Card(new RssItems("https://www.flowingcode.com/en/feed/",6,100,100,true,"encoded"));
 		card.setWidth("90vw");
 		card.getContent().setPadding(true);
 		card.getContent().getStyle().set("height", "90vh");
