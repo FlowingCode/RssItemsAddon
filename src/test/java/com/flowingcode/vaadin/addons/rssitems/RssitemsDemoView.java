@@ -19,18 +19,28 @@
  */
 package com.flowingcode.vaadin.addons.rssitems;
 
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.router.BeforeEnterEvent;
-import com.vaadin.flow.router.BeforeEnterObserver;
+import com.flowingcode.vaadin.addons.DemoLayout;
+import com.github.appreciated.card.Card;
+import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.router.Route;
 
+/**
+ * @author Martin Lopez / Flowing Code
+ */
+@Route(value = "rssitems", layout = DemoLayout.class)
 @SuppressWarnings("serial")
-@Route("")
-public class DemoView extends VerticalLayout implements BeforeEnterObserver {
+public class RssitemsDemoView extends FlexLayout {
 
-	@Override
-	public void beforeEnter(BeforeEnterEvent event) {
-		event.forwardTo(RssitemsDemoView.class);
+	public RssitemsDemoView() {
+		setSizeFull();
+		setJustifyContentMode(JustifyContentMode.CENTER);
+		Card card = new Card(new RssItems("https://www.flowingcode.com/en/feed/", 6, 100, 100, true, "encoded"));
+		card.setWidth("90vw");
+		card.getContent().setPadding(true);
+		card.getContent().getStyle().set("height", "90vh");
+		card.getContent().getStyle().set("overflow-y", "scroll");
+		add(card);
+		setAlignSelf(Alignment.CENTER, card);
 	}
 
 }
