@@ -20,8 +20,8 @@
 package com.flowingcode.vaadin.addons.rssitems;
 
 import com.flowingcode.vaadin.addons.DemoLayout;
-import com.github.appreciated.card.Card;
-import com.vaadin.flow.component.orderedlayout.FlexLayout;
+import com.flowingcode.vaadin.addons.demo.impl.TabbedDemoImpl;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 
 /**
@@ -29,18 +29,16 @@ import com.vaadin.flow.router.Route;
  */
 @Route(value = "rssitems", layout = DemoLayout.class)
 @SuppressWarnings("serial")
-public class RssitemsDemoView extends FlexLayout {
+public class RssitemsDemoView extends VerticalLayout {
+
+	private static final String RSS_DEMO = "Rss Items Demo";
+	private static final String RSS_SOURCE = "https://github.com/FlowingCode/RssItemsAddon/blob/master/src/test/java/com/flowingcode/vaadin/addons/rssitems/RssitemsDemo.java";
 
 	public RssitemsDemoView() {
+		TabbedDemoImpl<RssitemsDemo> rssDemo = new TabbedDemoImpl<>(new RssitemsDemo(), RSS_DEMO,
+				RSS_SOURCE);
 		setSizeFull();
-		setJustifyContentMode(JustifyContentMode.CENTER);
-		Card card = new Card(new RssItems("https://www.flowingcode.com/en/feed/", 6, 100, 100, true, "encoded"));
-		card.setWidth("90vw");
-		card.getContent().setPadding(true);
-		card.getContent().getStyle().set("height", "90vh");
-		card.getContent().getStyle().set("overflow-y", "scroll");
-		add(card);
-		setAlignSelf(Alignment.CENTER, card);
+		add(rssDemo);
 	}
 
 }
