@@ -27,7 +27,7 @@ import com.vaadin.flow.router.Route;
 /**
  * @author Martin Lopez / Flowing Code
  */
-@Route(value = "rssitems", layout = DemoLayout.class)
+@Route(value = "rss-items", layout = DemoLayout.class)
 @SuppressWarnings("serial")
 public class RssitemsDemoView extends VerticalLayout {
 
