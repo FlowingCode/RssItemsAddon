@@ -20,6 +20,7 @@
 package com.flowingcode.vaadin.addons.rssitems;
 
 import com.flowingcode.vaadin.addons.DemoLayout;
+import com.flowingcode.vaadin.addons.GithubLink;
 import com.flowingcode.vaadin.addons.demo.impl.TabbedDemoImpl;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
@@ -29,6 +30,7 @@ import com.vaadin.flow.router.Route;
  */
 @Route(value = "rss-items", layout = DemoLayout.class)
 @SuppressWarnings("serial")
+@GithubLink("https://github.com/FlowingCode/RssItemsAddon")
 public class RssitemsDemoView extends VerticalLayout {
 
 	private static final String RSS_DEMO = "Rss Items Demo";
