@@ -21,8 +21,7 @@ package com.flowingcode.vaadin.addons.rssitems;
 
 import com.flowingcode.vaadin.addons.DemoLayout;
 import com.flowingcode.vaadin.addons.GithubLink;
-import com.flowingcode.vaadin.addons.demo.impl.TabbedDemoImpl;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.flowingcode.vaadin.addons.demo.TabbedDemo;
 import com.vaadin.flow.router.Route;
 
 /**
@@ -31,16 +30,14 @@ import com.vaadin.flow.router.Route;
 @Route(value = "rss-items", layout = DemoLayout.class)
 @SuppressWarnings("serial")
 @GithubLink("https://github.com/FlowingCode/RssItemsAddon")
-public class RssitemsDemoView extends VerticalLayout {
+public class RssitemsDemoView extends TabbedDemo {
 
 	private static final String RSS_DEMO = "Rss Items Demo";
 	private static final String RSS_SOURCE = "https://github.com/FlowingCode/RssItemsAddon/blob/master/src/test/java/com/flowingcode/vaadin/addons/rssitems/RssitemsDemo.java";
 
 	public RssitemsDemoView() {
-		TabbedDemoImpl<RssitemsDemo> rssDemo = new TabbedDemoImpl<>(new RssitemsDemo(), RSS_DEMO,
-				RSS_SOURCE);
+		addDemo(new RssitemsDemo(), RSS_DEMO, RSS_SOURCE);
 		setSizeFull();
-		add(rssDemo);
 	}
 
 }
