@@ -19,8 +19,12 @@
  */
 package com.flowingcode.vaadin.addons.rssitems;
 
+import com.flowingcode.vaadin.addons.demo.DemoSource;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
+import com.vaadin.flow.router.PageTitle;
 
+@PageTitle("Rss Items Demo")
+@DemoSource
 @SuppressWarnings("serial")
 public class RssitemsDemo extends FlexLayout {
 
