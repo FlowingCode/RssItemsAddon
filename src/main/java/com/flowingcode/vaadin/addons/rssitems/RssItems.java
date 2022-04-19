@@ -93,7 +93,7 @@ public class RssItems extends PolymerTemplate<RssItemsModel> implements HasSize,
 	public RssItems(String url, int max, int maxTitleLength, int maxExcerptLength, boolean extractImageFromDescription, String attributeName) {
 		this.extractImageFromDescription = extractImageFromDescription;
 		if (this.extractImageFromDescription) {
-			UI.getCurrent().getPage().executeJs(IMAGE_METHOD.replaceAll("%%ATTRIBUTE_NAME%%", attributeName), this.getElement());
+			this.getElement().executeJs(IMAGE_METHOD.replaceAll("%%ATTRIBUTE_NAME%%", attributeName), this);
 		}
 		
 		getModel().setAuto(true);
@@ -110,7 +110,7 @@ public class RssItems extends PolymerTemplate<RssItemsModel> implements HasSize,
 	 * @param url rss feed url
 	 */
 	public RssItems(String url) {
-		this(url,DEFAULT_MAX, DEFAULT_MAX_TITLE_LENGTH, DEFAULT_MAX_EXCERPT_LENGTH,false);
+		this(url,DEFAULT_MAX, DEFAULT_MAX_TITLE_LENGTH, DEFAULT_MAX_EXCERPT_LENGTH, false);
 	}
 
 	private void refreshUrl() {
