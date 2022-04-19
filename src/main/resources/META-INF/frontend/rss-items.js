@@ -316,11 +316,22 @@ class RssItems extends PolymerElement {
     if (item.thumbnail && item.thumbnail._url) {
       return item.thumbnail._url
     } else {
-      var element = document.createElement('div')
-      element.innerHTML = item.description
-      var image = element.querySelector('img') || {}
-      return image.src || ''
+      var descriptionSrc = this.__getImageFromAttribute(item, true);
+      return descriptionSrc ? descriptionSrc : this.__getImageFromAttribute(item, false);
     }
+  }
+
+  /**
+   * 
+   * @param {Object} item Item where find image.
+   * @param {boolean} byDescription If true, search for image in item description, otherwise in encoded attribute.
+   * @returns {String} Image src.
+   */
+  __getImageFromAttribute(item, byDescription) {
+    var element = document.createElement('div')
+    element.innerHTML = byDescription ? item.description : item.encoded;
+    var image = element.querySelector('img') || {}
+    return image.src || ''
   }
 
   /**
