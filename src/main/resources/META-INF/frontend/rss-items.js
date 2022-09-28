@@ -38,7 +38,7 @@ import '@polymer/polymer/polymer-legacy.js';
 
 import '@polymer/iron-ajax/iron-ajax.js';
 import '@polymer/iron-image/iron-image.js';
-import * as X2JS from "x2js/x2js.js";
+import X2JS from "x2js/x2js.js";
 import {PolymerElement} from '@polymer/polymer/polymer-element.js';
 import {html} from '@polymer/polymer/lib/utils/html-tag.js';
 
