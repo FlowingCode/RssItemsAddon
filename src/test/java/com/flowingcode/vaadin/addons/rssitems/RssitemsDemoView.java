@@ -23,18 +23,20 @@ package com.flowingcode.vaadin.addons.rssitems;
 import com.flowingcode.vaadin.addons.DemoLayout;
 import com.flowingcode.vaadin.addons.GithubLink;
 import com.flowingcode.vaadin.addons.demo.TabbedDemo;
+import com.vaadin.flow.router.ParentLayout;
 import com.vaadin.flow.router.Route;
 
 /**
  * @author Martin Lopez / Flowing Code
  */
-@Route(value = "rss-items", layout = DemoLayout.class)
+@ParentLayout(DemoLayout.class)
+@Route("rss-items")
 @SuppressWarnings("serial")
 @GithubLink("https://github.com/FlowingCode/RssItemsAddon")
 public class RssitemsDemoView extends TabbedDemo {
 
 	public RssitemsDemoView() {
-		addDemo(new RssitemsDemo());
+		addDemo(RssitemsDemo.class);
 		setSizeFull();
 	}
 
