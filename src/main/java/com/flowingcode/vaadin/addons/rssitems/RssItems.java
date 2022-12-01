@@ -30,13 +30,12 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
-
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasSize;
 import com.vaadin.flow.component.HasStyle;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.dependency.NpmPackage;
-import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
 
 /**
  * Simple RSS Reader component based on https://github.com/TherapyChat/rss-items
@@ -49,7 +48,7 @@ import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
 @NpmPackage(value="x2js",version="3.4.0")
 @JsModule("./rss-items.js")
 @SuppressWarnings("serial")
-public class RssItems extends PolymerTemplate<RssItemsModel> implements HasSize, HasStyle {
+public class RssItems extends Component implements HasSize, HasStyle {
 	
 	private String url;
 	
@@ -96,13 +95,13 @@ public class RssItems extends PolymerTemplate<RssItemsModel> implements HasSize,
 			this.getElement().executeJs(IMAGE_METHOD.replaceAll("%%ATTRIBUTE_NAME%%", attributeName), this);
 		}
 		
-		getModel().setAuto(true);
-		getModel().setMax(max);
-		getModel().setMaxExcerptLength(maxExcerptLength);
-		getModel().setMaxTitleLength(maxTitleLength);
+		this.setUrl(url);
+		this.setAuto(true);
+		this.setMax(max);
+		this.setMaxExcerptLength(maxExcerptLength);
+		this.setMaxTitleLength(maxTitleLength);
 		addClassName("x-scope");
-		addClassName("rss-items-0");
-		this.url = url;
+		addClassName("rss-items-0");		
 		refreshUrl();
 	}
 	
@@ -143,36 +142,52 @@ public class RssItems extends PolymerTemplate<RssItemsModel> implements HasSize,
 	}
 	
 	/**
+     * Sets the auto property to init the RSS request
+     * @param auto
+     */
+	public void setAuto(boolean auto) {
+	  this.getElement().setProperty("auto", auto);
+	}
+	
+	/**
 	 * Sets the max title length
 	 * @param length
 	 */
-	public void setMaxTitleLength(int length) {
-		getModel().setMaxTitleLength(length);
-		refreshUrl();
-	}
+    public void setMaxTitleLength(int length) {
+      this.getElement().setProperty("maxTitleLength", length);
+      refreshUrl();
+    }
 	
 	/**
 	 * Sets the max title excerpt length
 	 * @param length
 	 */
-	public void setMaxExcerptLength(int length) {
-		getModel().setMaxExcerptLength(length);
-		refreshUrl();
-	}
+    public void setMaxExcerptLength(int length) {
+      this.getElement().setProperty("maxExcerptLength", length);
+      refreshUrl();
+    }
 	
 	/**
 	 * Sets the maximun number of items to be shown
 	 * @param max
 	 */
-	public void setMax(int max) {
-		getModel().setMax(max);
-		refreshUrl();
-	}
+    public void setMax(int max) {
+      this.getElement().setProperty("max", max);
+      refreshUrl();
+    }
+	
+    public void setExtractImageFromDescription(boolean extractImageFromDescription) {
+      this.extractImageFromDescription = extractImageFromDescription;
+      refreshUrl();
+    }
 
-	public void setExtractImageFromDescription(boolean extractImageFromDescription) {
-		this.extractImageFromDescription = extractImageFromDescription;
-		refreshUrl();
-	}
-
+    /**
+     * Sets the url of the RSS
+     * @param url
+     */
+    public void setUrl(String url) {
+      this.getElement().setProperty("url", url);
+      this.url = url;
+    }
 
 }
