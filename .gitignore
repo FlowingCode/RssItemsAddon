@@ -13,3 +13,8 @@ drivers
 tsconfig.json
 .idea
 types.d.ts
+/frontend/generated
+/frontend/index.html
+/src/main/dev-bundle
+vite.generated.ts
+vite.config.ts
