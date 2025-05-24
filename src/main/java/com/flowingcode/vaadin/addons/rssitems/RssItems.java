@@ -54,7 +54,7 @@ public class RssItems extends Component implements HasSize, HasStyle {
 	
 	private boolean extractImageFromDescription;
 	
-	private static final String ERROR_RSS = "<rss>\r\n" + 
+	public static final String ERROR_RSS = "<rss>\r\n" + 
 			"  <channel>\r\n" + 
 			"    <item>\r\n" + 
 			"      <title>Error Retrieving RSS</title>\r\n" + 
@@ -63,7 +63,7 @@ public class RssItems extends Component implements HasSize, HasStyle {
 			"      <thumbnail url=\"https://\"></thumbnail>\r\n" + 
 			"    </item>";
 	
-	private static final String IMAGE_METHOD = "    $0._getItemImageScr = function (item) {\r\n" + 
+	public static final String IMAGE_METHOD = "    $0._getItemImageScr = function (item) {\r\n" + 
 			"        var element = document.createElement('div');\r\n" +
 			"        element.innerHTML = item.%%ATTRIBUTE_NAME%%;\r\n" + 
 			"        var image = element.querySelector('img') || {};\r\n" + 
@@ -72,11 +72,11 @@ public class RssItems extends Component implements HasSize, HasStyle {
 			"";
 	
 
-	private static final int DEFAULT_MAX = Integer.MAX_VALUE;
+	public static final int DEFAULT_MAX = Integer.MAX_VALUE;
 
-	private static final int DEFAULT_MAX_TITLE_LENGTH = 50;
+	public static final int DEFAULT_MAX_TITLE_LENGTH = 50;
 
-	private static final int DEFAULT_MAX_EXCERPT_LENGTH = 100;
+	public static final int DEFAULT_MAX_EXCERPT_LENGTH = 100;
 	
 	/**
 	 * @param url rss feed url
@@ -102,7 +102,6 @@ public class RssItems extends Component implements HasSize, HasStyle {
 		this.setMaxTitleLength(maxTitleLength);
 		addClassName("x-scope");
 		addClassName("rss-items-0");		
-		refreshUrl();
 	}
 	
 	/**
@@ -112,7 +111,13 @@ public class RssItems extends Component implements HasSize, HasStyle {
 		this(url,DEFAULT_MAX, DEFAULT_MAX_TITLE_LENGTH, DEFAULT_MAX_EXCERPT_LENGTH, false);
 	}
 
-	private void refreshUrl() {
+	/**
+	 * Constructor for testing purposes.
+	 */
+	protected RssItems() {
+	}
+
+	protected void refreshUrl() {
 		try {
 			String rss = obtainRss(url);
 			invokeXmlToItems(rss);
@@ -122,11 +127,11 @@ public class RssItems extends Component implements HasSize, HasStyle {
 		}
 	}
 
-	private void invokeXmlToItems(String rss) {
+	protected void invokeXmlToItems(String rss) {
 		this.getElement().executeJs("this.xmlToItems($0)", rss);
 	}
 
-	private String obtainRss(String url) throws ClientProtocolException, IOException {
+	protected String obtainRss(String url) throws ClientProtocolException, IOException {
 		HttpClient client = HttpClientBuilder.create().build();
 		HttpGet request = new HttpGet(URI.create(url));
 		request.addHeader("Content-Type", "application/xml");
@@ -155,7 +160,6 @@ public class RssItems extends Component implements HasSize, HasStyle {
 	 */
     public void setMaxTitleLength(int length) {
       this.getElement().setProperty("maxTitleLength", length);
-      refreshUrl();
     }
 	
 	/**
@@ -164,7 +168,6 @@ public class RssItems extends Component implements HasSize, HasStyle {
 	 */
     public void setMaxExcerptLength(int length) {
       this.getElement().setProperty("maxExcerptLength", length);
-      refreshUrl();
     }
 	
 	/**
@@ -173,12 +176,10 @@ public class RssItems extends Component implements HasSize, HasStyle {
 	 */
     public void setMax(int max) {
       this.getElement().setProperty("max", max);
-      refreshUrl();
     }
 	
     public void setExtractImageFromDescription(boolean extractImageFromDescription) {
       this.extractImageFromDescription = extractImageFromDescription;
-      refreshUrl();
     }
 
     /**
@@ -188,6 +189,14 @@ public class RssItems extends Component implements HasSize, HasStyle {
     public void setUrl(String url) {
       this.getElement().setProperty("url", url);
       this.url = url;
+      refreshUrl();
+    }
+    
+    /**
+     * Refreshes the RSS feed.
+     */
+    public void refresh() {
+    	refreshUrl();
     }
 
 }
