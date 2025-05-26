@@ -34,8 +34,10 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasSize;
 import com.vaadin.flow.component.HasStyle;
 import com.vaadin.flow.component.Tag;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.dependency.NpmPackage;
+import com.vaadin.flow.internal.StateTree.ExecutionRegistration;
 
 /**
  * Simple RSS Reader component based on https://github.com/TherapyChat/rss-items
@@ -53,6 +55,8 @@ public class RssItems extends Component implements HasSize, HasStyle {
 	private String url;
 	
 	private boolean extractImageFromDescription;
+	
+	private ExecutionRegistration pendingRefreshRegistration;
 	
 	public static final String ERROR_RSS = "<rss>\r\n" + 
 			"  <channel>\r\n" + 
@@ -117,7 +121,43 @@ public class RssItems extends Component implements HasSize, HasStyle {
 	protected RssItems() {
 	}
 
-	protected void refreshUrl() {
+	private void scheduleRefresh() {
+	    UI ui = UI.getCurrent();
+	    if (ui == null) {
+	        // If no UI is available (e.g., background thread or testing without proper UI setup),
+	        // consider an immediate refresh or log a warning.
+	        // For now, let's do an immediate refresh as a fallback,
+	        // though this might not be ideal in all detached scenarios.
+	        // This matches the original behavior more closely if UI isn't available.
+	        refreshUrl();
+	        return;
+	    }
+
+	    // If there's a pending registration, remove it.
+	    if (pendingRefreshRegistration != null) {
+	        try {
+	            pendingRefreshRegistration.remove();
+	        } catch (Exception e) {
+	            // Log or handle potential exceptions if .remove() fails, though typically it shouldn't.
+	            // For example, if the registration is already inactive.
+	            System.err.println("Error removing pending refresh registration: " + e.getMessage());
+	        }
+	        pendingRefreshRegistration = null;
+	    }
+
+	    // Schedule refreshUrl to be called before the client response.
+	    // The lambda uiParam -> refreshUrl() is used because the consumer takes the UI as a parameter.
+	    pendingRefreshRegistration = ui.beforeClientResponse(this, uiParam -> refreshUrl());
+	}
+	
+	private void refreshUrl() {
+		if (pendingRefreshRegistration != null) {
+		    // If refreshUrl is called directly while a refresh was scheduled,
+		    // the scheduled one is now effectively preempted or redundant.
+		    // We nullify the registration to reflect this.
+		    // Note: We don't call .remove() here as this method IS the execution (or a direct call).
+		    pendingRefreshRegistration = null;
+		}
 		try {
 			String rss = obtainRss(url);
 			invokeXmlToItems(rss);
@@ -127,7 +167,7 @@ public class RssItems extends Component implements HasSize, HasStyle {
 		}
 	}
 
-	protected void invokeXmlToItems(String rss) {
+	private void invokeXmlToItems(String rss) {
 		this.getElement().executeJs("this.xmlToItems($0)", rss);
 	}
 
@@ -160,6 +200,7 @@ public class RssItems extends Component implements HasSize, HasStyle {
 	 */
     public void setMaxTitleLength(int length) {
       this.getElement().setProperty("maxTitleLength", length);
+      scheduleRefresh();
     }
 	
 	/**
@@ -168,6 +209,7 @@ public class RssItems extends Component implements HasSize, HasStyle {
 	 */
     public void setMaxExcerptLength(int length) {
       this.getElement().setProperty("maxExcerptLength", length);
+      scheduleRefresh();
     }
 	
 	/**
@@ -176,10 +218,12 @@ public class RssItems extends Component implements HasSize, HasStyle {
 	 */
     public void setMax(int max) {
       this.getElement().setProperty("max", max);
+      scheduleRefresh();
     }
 	
     public void setExtractImageFromDescription(boolean extractImageFromDescription) {
       this.extractImageFromDescription = extractImageFromDescription;
+      scheduleRefresh();
     }
 
     /**
@@ -189,14 +233,23 @@ public class RssItems extends Component implements HasSize, HasStyle {
     public void setUrl(String url) {
       this.getElement().setProperty("url", url);
       this.url = url;
-      refreshUrl();
+      scheduleRefresh();
     }
     
     /**
      * Refreshes the RSS feed.
      */
     public void refresh() {
-    	refreshUrl();
+    	if (pendingRefreshRegistration != null) {
+            try {
+                pendingRefreshRegistration.remove();
+            } catch (Exception e) {
+                // Log or handle potential exceptions.
+                System.err.println("Error removing pending refresh registration during manual refresh: " + e.getMessage());
+            }
+            pendingRefreshRegistration = null;
+        }
+        refreshUrl();
     }
 
 }
