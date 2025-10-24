@@ -18,3 +18,6 @@ types.d.ts
 /src/main/dev-bundle
 vite.generated.ts
 vite.config.ts
+/src/main/frontend/generated
+/src/main/frontend/index.html
+/src/main/bundles
