@@ -5,6 +5,10 @@
 
 Vaadin 14+ RSS display component based on https://github.com/TherapyChat/rss-items
 
+## Supported versions
+
+Supported versions: Vaadin 14-24 (add-on version 2.x)
+
 ## Online demo
 
 [Online demo here](http://addonsv14.flowingcode.com/rss-items)
