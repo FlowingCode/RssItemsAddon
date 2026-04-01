@@ -10,9 +10,9 @@ package.json
 webpack.config.js
 /error-screenshots
 drivers
-tsconfig.json
+/tsconfig.json*
 .idea
-types.d.ts
+/types.d.ts*
 /frontend/generated
 /frontend/index.html
 /src/main/dev-bundle
@@ -21,3 +21,4 @@ vite.config.ts
 /src/main/frontend/generated
 /src/main/frontend/index.html
 /src/main/bundles
+/.claude/settings.local.json
