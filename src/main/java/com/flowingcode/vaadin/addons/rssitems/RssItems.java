@@ -95,14 +95,13 @@ public class RssItems extends Component implements HasSize, HasStyle {
 			this.getElement().executeJs(IMAGE_METHOD.replaceAll("%%ATTRIBUTE_NAME%%", attributeName), this);
 		}
 		
-		this.setUrl(url);
 		this.setAuto(true);
 		this.setMax(max);
 		this.setMaxExcerptLength(maxExcerptLength);
 		this.setMaxTitleLength(maxTitleLength);
 		addClassName("x-scope");
-		addClassName("rss-items-0");		
-		refreshUrl();
+		addClassName("rss-items-0");
+		this.setUrl(url);
 	}
 	
 	/**
@@ -178,12 +177,13 @@ public class RssItems extends Component implements HasSize, HasStyle {
     }
 
     /**
-     * Sets the url of the RSS
+     * Sets the url of the RSS and retrieves its items
      * @param url
      */
     public void setUrl(String url) {
       this.getElement().setProperty("url", url);
       this.url = url;
+      refreshUrl();
     }
 
 }
