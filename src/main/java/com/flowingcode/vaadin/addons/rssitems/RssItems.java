@@ -22,6 +22,7 @@ package com.flowingcode.vaadin.addons.rssitems;
 
 import java.io.IOException;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -134,7 +135,7 @@ public class RssItems extends Component implements HasSize, HasStyle {
 			throw new RuntimeException("Problem reading the rss url: " + response.getStatusLine().getReasonPhrase());
 		}
 		HttpEntity entity = response.getEntity();
-		String result = EntityUtils.toString(entity);
+		String result = EntityUtils.toString(entity, StandardCharsets.UTF_8);
 		EntityUtils.consume(entity);
 		request.completed();
 		return result;
