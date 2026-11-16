@@ -155,7 +155,6 @@ public class RssItems extends Component implements HasSize, HasStyle {
 	 */
     public void setMaxTitleLength(int length) {
       this.getElement().setProperty("maxTitleLength", length);
-      refreshUrl();
     }
 	
 	/**
@@ -164,7 +163,6 @@ public class RssItems extends Component implements HasSize, HasStyle {
 	 */
     public void setMaxExcerptLength(int length) {
       this.getElement().setProperty("maxExcerptLength", length);
-      refreshUrl();
     }
 	
 	/**
@@ -173,12 +171,10 @@ public class RssItems extends Component implements HasSize, HasStyle {
 	 */
     public void setMax(int max) {
       this.getElement().setProperty("max", max);
-      refreshUrl();
     }
 	
     public void setExtractImageFromDescription(boolean extractImageFromDescription) {
       this.extractImageFromDescription = extractImageFromDescription;
-      refreshUrl();
     }
 
     /**
