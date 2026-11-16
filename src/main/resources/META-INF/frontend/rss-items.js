@@ -205,7 +205,8 @@ class RssItems extends PolymerElement {
      * Max number of items to show. If it is undefined shows all items.
      */
     max: {
-      type: Number
+      type: Number,
+      observer: '_maxChanged'
     },
     /**
     * Max length for item excerpts. If the excerpt exceeds this length it will be trimed and will have an ellipsis appended.
@@ -278,12 +279,23 @@ class RssItems extends PolymerElement {
    * @param {Object} xml XML element.
    */
   xmlToItems(xml) {
+	// keep the xml, so that the items can be parsed again when max changes
+	this._xml = xml
 	var x2 = new X2JS()
 	var json = x2.xml2js(xml)
 	var items = json.rss ? json.rss.channel.item : json.channel.item
 	// truncate with this.max and parse items
 	items = this.max === undefined ? items : items.splice(0, this.max)
 	this.items = this._parseItems(items)
+  }
+
+  /**
+   * Parse the last received xml again, since items are truncated when parsed.
+   */
+  _maxChanged() {
+    if (this._xml !== undefined) {
+      this.xmlToItems(this._xml)
+    }
   }
 
   /**
