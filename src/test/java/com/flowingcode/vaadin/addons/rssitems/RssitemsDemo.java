@@ -33,6 +33,6 @@ public class RssitemsDemo extends FlexLayout {
 
 	public RssitemsDemo() {
 		setSizeFull();
-		add(new RssItems("https://www.flowingcode.com/en/feed/", 6, 100, 100, true, "encoded"));
+		add(new RssItems("https://www.flowingcode.com/en/feed/", 6, 100, 100, true, "description"));
 	}
 }
