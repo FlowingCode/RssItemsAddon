@@ -340,10 +340,28 @@ class RssItems extends PolymerElement {
    * @returns {String} Image src.
    */
   __getImageFromAttribute(item, byDescription) {
+    return this._getImageFromHtml(byDescription ? item.description : item.encoded);
+  }
+
+  /**
+   * Get the source of the first image in an HTML fragment.
+   * Relative sources are resolved against the feed URL.
+   * @param {String} html HTML fragment where find image.
+   * @returns {String} Absolute image src, or an empty string if there is no image.
+   */
+  _getImageFromHtml(html) {
     var element = document.createElement('div')
-    element.innerHTML = byDescription ? item.description : item.encoded;
-    var image = element.querySelector('img') || {}
-    return image.src || ''
+    element.innerHTML = html;
+    var image = element.querySelector('img')
+    var src = image ? image.getAttribute('src') : null
+    if (!src) {
+      return ''
+    }
+    try {
+      return new URL(src, new URL(this.url || '', document.baseURI)).href
+    } catch (e) {
+      return src
+    }
   }
 
   /**

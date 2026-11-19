@@ -65,10 +65,7 @@ public class RssItems extends Component implements HasSize, HasStyle {
 			"    </item>";
 	
 	private static final String IMAGE_METHOD = "    $0._getItemImageScr = function (item) {\r\n" + 
-			"        var element = document.createElement('div');\r\n" +
-			"        element.innerHTML = item.%%ATTRIBUTE_NAME%%;\r\n" + 
-			"        var image = element.querySelector('img') || {};\r\n" + 
-			"        return image.src || '';\r\n" + 
+			"        return this._getImageFromHtml(item.%%ATTRIBUTE_NAME%%);\r\n" +
 			"    }\r\n" + 
 			"";
 	
