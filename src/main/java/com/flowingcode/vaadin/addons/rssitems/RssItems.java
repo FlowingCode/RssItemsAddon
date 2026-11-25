@@ -55,6 +55,8 @@ public class RssItems extends Component implements HasSize, HasStyle {
 	
 	private boolean extractImageFromDescription;
 	
+	private final String imageAttributeName;
+	
 	private static final String ERROR_RSS = "<rss>\r\n" + 
 			"  <channel>\r\n" + 
 			"    <item>\r\n" + 
@@ -88,10 +90,8 @@ public class RssItems extends Component implements HasSize, HasStyle {
 	 * @param max max number of items to show
 	 */
 	public RssItems(String url, int max, int maxTitleLength, int maxExcerptLength, boolean extractImageFromDescription, String attributeName) {
-		this.extractImageFromDescription = extractImageFromDescription;
-		if (this.extractImageFromDescription) {
-			this.getElement().executeJs(IMAGE_METHOD.replaceAll("%%ATTRIBUTE_NAME%%", attributeName), this);
-		}
+		this.imageAttributeName = attributeName;
+		configureImageExtraction(extractImageFromDescription);
 		
 		this.setAuto(true);
 		this.setMax(max);
@@ -170,8 +170,24 @@ public class RssItems extends Component implements HasSize, HasStyle {
       this.getElement().setProperty("max", max);
     }
 	
+    /**
+     * Sets whether the image of each item is extracted from the HTML of the attribute
+     * given in the constructor (by default, {@code description}).
+     * @param extractImageFromDescription
+     */
     public void setExtractImageFromDescription(boolean extractImageFromDescription) {
+      configureImageExtraction(extractImageFromDescription);
+    }
+
+    private void configureImageExtraction(boolean extractImageFromDescription) {
       this.extractImageFromDescription = extractImageFromDescription;
+      if (extractImageFromDescription) {
+        this.getElement().executeJs(IMAGE_METHOD.replace("%%ATTRIBUTE_NAME%%", imageAttributeName), this);
+      } else {
+        this.getElement().executeJs("delete $0._getItemImageScr", this);
+      }
+      // parse the items again, in case they were already rendered
+      this.getElement().executeJs("$0._maxChanged()", this);
     }
 
     /**
