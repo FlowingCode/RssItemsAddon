@@ -93,7 +93,6 @@ public class RssItems extends Component implements HasSize, HasStyle {
 		this.imageAttributeName = attributeName;
 		configureImageExtraction(extractImageFromDescription);
 		
-		this.setAuto(true);
 		this.setMax(max);
 		this.setMaxExcerptLength(maxExcerptLength);
 		this.setMaxTitleLength(maxTitleLength);
