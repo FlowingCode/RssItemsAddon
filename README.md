@@ -1,17 +1,53 @@
+[![Published on Vaadin Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/rss-items)
+[![Stars on vaadin.com/directory](https://img.shields.io/vaadin-directory/star/rss-items.svg)](https://vaadin.com/directory/component/rss-items)
 [![Build Status](https://jenkins.flowingcode.com/job/RssItems-14-addon/badge/icon)](https://jenkins.flowingcode.com/job/RssItems-14-addon)
+[![Vaadin Directory](https://img.shields.io/vaadin-directory/v/rss-items)](https://vaadin.com/directory/component/rss-items)
 [![Javadoc](https://img.shields.io/badge/javadoc-00b4f0)](https://javadoc.flowingcode.com/artifact/com.flowingcode.addons/rss-items)
 
 # RSS Items Addon
 
 Vaadin 14+ RSS display component based on https://github.com/TherapyChat/rss-items
 
+## Features
+
+* Displays the items of an RSS feed, each one with its image, title and excerpt, linking to the original post
+* Configurable maximum number of items, and maximum title and excerpt length (longer texts are truncated with an ellipsis)
+* The item image is taken from the feed thumbnail or from the first image in the item content, and can be read from another item attribute instead
+* The feed URL can be changed at runtime
+
 ## Supported versions
 
-Supported versions: Vaadin 14-24 (add-on version 2.x)
+Supported versions: Vaadin 14-25 (add-on version 2.x)
 
 ## Online demo
 
-[Online demo here](http://addonsv14.flowingcode.com/rss-items)
+[Online demo here](https://addonsv25.flowingcode.com/rss-items)
+
+## Download release
+
+[Available in Vaadin Directory](https://vaadin.com/directory/component/rss-items)
+
+### Maven install
+
+Add the following dependencies in your pom.xml file:
+
+```xml
+<dependency>
+   <groupId>com.flowingcode.addons</groupId>
+   <artifactId>rss-items</artifactId>
+   <version>X.Y.Z</version>
+</dependency>
+```
+<!-- the above dependency should be updated with latest released version information -->
+
+```xml
+<repository>
+   <id>vaadin-addons</id>
+   <url>https://maven.vaadin.com/vaadin-addons</url>
+</repository>
+```
+
+For SNAPSHOT versions see [here](https://maven.flowingcode.com/snapshots/).
 
 ## Building and running demo
 
@@ -22,8 +58,7 @@ To see the demo, navigate to http://localhost:8080/
 
 ## Release notes
 
-- **Version 2.0.0** Initial release for Vaadin 14+ NPM mode
-- **Version 1.0.0** Initial Version
+See [here](https://github.com/FlowingCode/RssItemsAddon/releases)
 
 ## Issue tracking
 
@@ -65,16 +100,33 @@ This add-on is distributed under Apache License 2.0. For license terms, see LICE
 
 RssItems Addon is written by Flowing Code S.A.
 
-
 # Developer Guide
 
 ## Using the component
 
-- Call constructor
+- Basic usage
+```java
+RssItems items = new RssItems("https://www.flowingcode.com/en/feed/");
 ```
-RssItems items = new RssItems("https://www.flowingcode.com/feeds/posts/default?alt=rss");
+
+- Advanced constructor: maximum number of items, maximum title length, maximum excerpt length and whether to extract the image from the item description
+```java
+RssItems items = new RssItems("https://www.flowingcode.com/en/feed/", 6, 100, 100, true);
 ```
-- Advanced constructor
+
+- Changing the feed
+```java
+items.setUrl(anotherFeedUrl);
 ```
-RssItems items = new RssItems("https://www.flowingcode.com/feeds/posts/default?alt=rss",6,100,100);
+
+## Special configuration when using Spring
+
+By default, Vaadin Flow only includes `com/vaadin/flow/component` to be always scanned for UI components and views. For this reason, the add-on might need to be allowed in order to display correctly. 
+
+To do so, just add `com.flowingcode` to the `vaadin.allowed-packages` property in `src/main/resources/application.properties`, like:
+
 ```
+vaadin.allowed-packages = com.vaadin,org.vaadin,dev.hilla,com.flowingcode
+```
+ 
+More information on Spring scanning configuration [here](https://vaadin.com/docs/latest/integrations/spring/configuration/#configure-the-scanning-of-packages).
